@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AXIOM — Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg0: #0a0a0b;
+  --bg1: #111113;
+  --bg2: #18181c;
+  --bg3: #1f1f24;
+  --bg4: #27272e;
+  --border: rgba(255,255,255,0.08);
+  --border-md: rgba(255,255,255,0.13);
+  --border-bright: rgba(255,255,255,0.22);
+  --text-primary: #f0eeea;
+  --text-secondary: #9a9898;
+  --text-muted: #5a5858;
+  --accent: #f5a623;
+  --accent-dim: rgba(245,166,35,0.12);
+  --accent-glow: rgba(245,166,35,0.25);
+  --teal: #2dd4bf;
+  --teal-dim: rgba(45,212,191,0.1);
+  --coral: #f87171;
+  --coral-dim: rgba(248,113,113,0.1);
+  --violet: #a78bfa;
+  --violet-dim: rgba(167,139,250,0.1);
+  --green: #4ade80;
+  --green-dim: rgba(74,222,128,0.1);
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-sans: 'Outfit', system-ui, sans-serif;
+  --font-mono: 'DM Mono', 'Courier New', monospace;
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-xl: 24px;
+  --r-full: 999px;
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 20px; --sp-6: 24px; --sp-8: 32px; --sp-10: 40px;
+  --sp-12: 48px; --sp-16: 64px; --sp-20: 80px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.5);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.6);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg0); color: var(--text-primary); font-family: var(--font-sans); font-size: 15px; line-height: 1.6; overflow-x: hidden; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg1); }
+::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-bright); }
+
+/* ── LAYOUT ── */
+.layout { display: flex; min-height: 100vh; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 240px; min-height: 100vh; background: var(--bg1);
+  border-right: 1px solid var(--border);
+  position: fixed; top: 0; left: 0; bottom: 0;
+  display: flex; flex-direction: column; overflow-y: auto; z-index: 100;
+}
+.sidebar-logo {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.logo-mark {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+}
+.logo-mark span { color: var(--accent); }
+.logo-sub {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-top: 2px;
+  font-weight: 500;
+}
+.sidebar-section { padding: 20px 12px 8px; }
+.sidebar-label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+  padding: 0 12px;
+  margin-bottom: 6px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: var(--r-md);
+  color: var(--text-secondary); font-size: 13.5px; font-weight: 400;
+  cursor: pointer; transition: all 0.15s; text-decoration: none;
+  border: none; background: none; width: 100%; text-align: left;
+}
+.nav-item:hover { background: var(--bg3); color: var(--text-primary); }
+.nav-item.active { background: var(--accent-dim); color: var(--accent); font-weight: 500; }
+.nav-item .nav-icon { width: 16px; height: 16px; opacity: 0.7; flex-shrink: 0; }
+.nav-item.active .nav-icon { opacity: 1; }
+.sidebar-footer {
+  margin-top: auto; padding: 16px;
+  border-top: 1px solid var(--border);
+}
+.version-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--r-full); padding: 5px 10px;
+  font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);
+}
+.version-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+/* ── MAIN CONTENT ── */
+.main { margin-left: 240px; flex: 1; }
+.page { display: none; padding: 48px 56px; max-width: 960px; animation: fadein 0.2s ease; }
+.page.active { display: block; }
+@keyframes fadein { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── PAGE HEADER ── */
+.page-eyebrow {
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent); font-weight: 600; margin-bottom: 10px;
+}
+.page-title {
+  font-family: var(--font-display); font-size: 44px; font-weight: 400;
+  color: var(--text-primary); line-height: 1.1; margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+.page-desc { color: var(--text-secondary); font-size: 15px; max-width: 560px; line-height: 1.7; margin-bottom: 48px; }
+
+/* ── SECTION ── */
+.section { margin-bottom: 56px; }
+.section-title { font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.section-subtitle { font-size: 18px; font-weight: 500; color: var(--text-primary); margin-bottom: 8px; }
+.section-body { color: var(--text-secondary); font-size: 14px; line-height: 1.7; margin-bottom: 20px; }
+
+/* ── COLOR TOKENS ── */
+.color-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+.color-card {
+  border-radius: var(--r-lg); overflow: hidden;
+  border: 1px solid var(--border); background: var(--bg2);
+  cursor: pointer; transition: transform 0.15s, border-color 0.15s;
+}
+.color-card:hover { transform: translateY(-2px); border-color: var(--border-md); }
+.color-swatch { height: 80px; display: flex; align-items: flex-end; padding: 10px; }
+.color-label-row { padding: 12px; }
+.color-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.color-value { font-size: 11px; color: var(--text-secondary); font-family: var(--font-mono); margin-top: 2px; }
+.color-role { font-size: 10px; color: var(--text-muted); margin-top: 4px; letter-spacing: 0.06em; text-transform: uppercase; }
+.color-copied {
+  font-size: 10px; background: var(--bg4); border-radius: var(--r-sm);
+  padding: 2px 7px; color: var(--accent); font-family: var(--font-mono);
+  display: none;
+}
+.color-card.copied .color-copied { display: inline; }
+
+/* token palette strips */
+.palette-strip { display: flex; border-radius: var(--r-lg); overflow: hidden; margin-bottom: 10px; height: 60px; border: 1px solid var(--border); }
+.palette-stop { flex: 1; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; cursor: pointer; transition: flex 0.2s; }
+.palette-stop:hover { flex: 2; }
+.palette-stop span { font-size: 9px; color: rgba(255,255,255,0.55); font-family: var(--font-mono); opacity: 0; transition: opacity 0.15s; }
+.palette-stop:hover span { opacity: 1; }
+
+/* ── TYPOGRAPHY ── */
+.type-specimen { margin-bottom: 28px; border-radius: var(--r-lg); border: 1px solid var(--border); background: var(--bg2); padding: 24px 28px; }
+.type-meta { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+.type-tag { font-size: 10px; font-family: var(--font-mono); color: var(--text-muted); background: var(--bg3); padding: 3px 8px; border-radius: var(--r-sm); }
+.type-name { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); font-weight: 600; }
+.type-sample-display { font-family: var(--font-display); font-size: 52px; font-weight: 400; color: var(--text-primary); line-height: 1; letter-spacing: -1px; }
+.type-sample-h1 { font-family: var(--font-sans); font-size: 36px; font-weight: 700; color: var(--text-primary); line-height: 1.1; }
+.type-sample-h2 { font-family: var(--font-sans); font-size: 24px; font-weight: 600; color: var(--text-primary); }
+.type-sample-h3 { font-family: var(--font-sans); font-size: 18px; font-weight: 600; color: var(--text-primary); }
+.type-sample-body { font-size: 15px; color: var(--text-secondary); line-height: 1.7; max-width: 480px; }
+.type-sample-label { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+.type-sample-mono { font-family: var(--font-mono); font-size: 13px; color: var(--teal); }
+
+/* ── SPACING RULER ── */
+.spacing-grid { display: flex; flex-direction: column; gap: 14px; }
+.spacing-row { display: flex; align-items: center; gap: 16px; }
+.spacing-bar-wrap { display: flex; align-items: center; flex: 1; }
+.spacing-bar { height: 28px; background: var(--accent-dim); border: 1px solid var(--accent-glow); border-radius: 4px; transition: width 0.3s; position: relative; }
+.spacing-label { font-family: var(--font-mono); font-size: 12px; color: var(--accent); min-width: 40px; }
+.spacing-name { font-size: 12px; color: var(--text-secondary); min-width: 64px; }
+.spacing-px { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); min-width: 40px; text-align: right; }
+
+/* ── COMPONENTS ── */
+/* Buttons */
+.btn-grid { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 28px; background: var(--bg2); border-radius: var(--r-lg); border: 1px solid var(--border); }
+.btn { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-sans); font-size: 13.5px; font-weight: 500; cursor: pointer; border: none; border-radius: var(--r-md); padding: 9px 18px; transition: all 0.15s; letter-spacing: 0.01em; white-space: nowrap; }
+.btn-primary { background: var(--accent); color: #0a0a0b; }
+.btn-primary:hover { background: #f7b733; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(245,166,35,0.35); }
+.btn-secondary { background: transparent; color: var(--text-primary); border: 1px solid var(--border-md); }
+.btn-secondary:hover { background: var(--bg3); border-color: var(--border-bright); }
+.btn-ghost { background: transparent; color: var(--text-secondary); border: none; }
+.btn-ghost:hover { color: var(--text-primary); background: var(--bg3); }
+.btn-danger { background: var(--coral-dim); color: var(--coral); border: 1px solid rgba(248,113,113,0.25); }
+.btn-danger:hover { background: rgba(248,113,113,0.18); }
+.btn-teal { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(45,212,191,0.25); }
+.btn-teal:hover { background: rgba(45,212,191,0.18); }
+.btn-sm { padding: 6px 12px; font-size: 12px; border-radius: var(--r-sm); }
+.btn-lg { padding: 12px 24px; font-size: 15px; border-radius: var(--r-lg); }
+.btn-icon-only { padding: 9px; }
+.btn:active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.38; cursor: not-allowed; }
+
+/* Badges */
+.badge-row { display: flex; flex-wrap: wrap; gap: 8px; padding: 24px; background: var(--bg2); border-radius: var(--r-lg); border: 1px solid var(--border); }
+.badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; letter-spacing: 0.05em; padding: 4px 10px; border-radius: var(--r-full); }
+.badge-dot { width: 5px; height: 5px; border-radius: 50%; }
+.badge-default { background: var(--bg4); color: var(--text-secondary); }
+.badge-accent { background: var(--accent-dim); color: var(--accent); }
+.badge-success { background: var(--green-dim); color: var(--green); }
+.badge-danger { background: var(--coral-dim); color: var(--coral); }
+.badge-info { background: var(--violet-dim); color: var(--violet); }
+.badge-teal { background: var(--teal-dim); color: var(--teal); }
+
+/* Inputs */
+.input-grid { display: flex; flex-direction: column; gap: 16px; padding: 28px; background: var(--bg2); border-radius: var(--r-lg); border: 1px solid var(--border); }
+.form-group { display: flex; flex-direction: column; gap: 7px; }
+.form-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.05em; text-transform: uppercase; }
+.form-hint { font-size: 11.5px; color: var(--text-muted); }
+.input-base {
+  background: var(--bg1); border: 1px solid var(--border-md);
+  border-radius: var(--r-md); padding: 10px 14px;
+  color: var(--text-primary); font-family: var(--font-sans); font-size: 14px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%; outline: none;
+}
+.input-base:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+.input-base::placeholder { color: var(--text-muted); }
+.input-base.error { border-color: var(--coral); }
+.input-base.error:focus { box-shadow: 0 0 0 3px var(--coral-dim); }
+.input-base:disabled { opacity: 0.4; cursor: not-allowed; }
+.input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.input-addon-wrap { position: relative; }
+.input-addon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 14px; pointer-events: none; }
+.input-addon-wrap .input-base { padding-left: 34px; }
+.form-error { font-size: 11.5px; color: var(--coral); }
+
+/* Cards */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+.card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--r-xl); padding: 24px;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+.card:hover { border-color: var(--border-md); transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.card-icon { width: 40px; height: 40px; border-radius: var(--r-md); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; font-size: 18px; }
+.card-title { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+.card-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+.card-footer { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.card-meta { font-size: 11px; color: var(--text-muted); }
+.card-featured { border-color: rgba(245,166,35,0.3); background: linear-gradient(135deg, var(--bg2) 0%, rgba(245,166,35,0.04) 100%); }
+
+/* Toast / Alerts */
+.alert-stack { display: flex; flex-direction: column; gap: 10px; }
+.alert { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-radius: var(--r-lg); border: 1px solid; font-size: 13.5px; }
+.alert-icon { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
+.alert-content { flex: 1; }
+.alert-title { font-weight: 600; margin-bottom: 2px; }
+.alert-message { color: inherit; opacity: 0.8; font-size: 13px; }
+.alert-info { background: var(--violet-dim); border-color: rgba(167,139,250,0.25); color: var(--violet); }
+.alert-success { background: var(--green-dim); border-color: rgba(74,222,128,0.25); color: var(--green); }
+.alert-warning { background: var(--accent-dim); border-color: var(--accent-glow); color: var(--accent); }
+.alert-error { background: var(--coral-dim); border-color: rgba(248,113,113,0.25); color: var(--coral); }
+
+/* Toggle / Switch */
+.toggle-group { display: flex; flex-direction: column; gap: 14px; padding: 24px; background: var(--bg2); border-radius: var(--r-lg); border: 1px solid var(--border); }
+.toggle-row { display: flex; align-items: center; justify-content: space-between; }
+.toggle-info { flex: 1; }
+.toggle-title { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+.toggle-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.switch { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.switch-track {
+  position: absolute; inset: 0; background: var(--bg4);
+  border-radius: var(--r-full); transition: background 0.2s;
+  cursor: pointer; border: 1px solid var(--border-md);
+}
+.switch input:checked + .switch-track { background: var(--accent); border-color: var(--accent); }
+.switch-thumb {
+  position: absolute; left: 3px; top: 3px;
+  width: 16px; height: 16px; background: #fff;
+  border-radius: 50%; transition: transform 0.2s;
+  pointer-events: none;
+}
+.switch input:checked ~ .switch-thumb { transform: translateX(20px); }
+
+/* Progress */
+.progress-stack { display: flex; flex-direction: column; gap: 16px; padding: 24px; background: var(--bg2); border-radius: var(--r-lg); border: 1px solid var(--border); }
+.progress-item { display: flex; flex-direction: column; gap: 8px; }
+.progress-header { display: flex; justify-content: space-between; font-size: 12px; }
+.progress-name { color: var(--text-secondary); }
+.progress-value { font-family: var(--font-mono); color: var(--text-muted); }
+.progress-track { height: 6px; background: var(--bg4); border-radius: var(--r-full); overflow: hidden; }
+.progress-fill { height: 100%; border-radius: var(--r-full); transition: width 1s cubic-bezier(0.34,1.56,0.64,1); }
+
+/* Avatar group */
+.avatar-group { display: flex; align-items: center; }
+.avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 2px solid var(--bg2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; margin-left: -8px;
+  flex-shrink: 0; cursor: pointer; transition: transform 0.15s;
+}
+.avatar:first-child { margin-left: 0; }
+.avatar:hover { transform: translateY(-3px) scale(1.05); z-index: 10; }
+.avatar-overflow { background: var(--bg4); color: var(--text-muted); font-size: 11px; }
+
+/* Tabs */
+.tab-bar { display: flex; gap: 2px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 4px; margin-bottom: 20px; }
+.tab-item { padding: 8px 18px; border-radius: var(--r-md); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; color: var(--text-secondary); user-select: none; }
+.tab-item:hover { color: var(--text-primary); background: var(--bg3); }
+.tab-item.active { background: var(--bg4); color: var(--text-primary); }
+
+/* Table */
+.data-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.data-table th { text-align: left; padding: 10px 16px; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); background: var(--bg2); }
+.data-table td { padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-secondary); vertical-align: middle; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: var(--bg2); color: var(--text-primary); }
+.data-table tbody { background: var(--bg1); }
+.table-wrap { border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; }
+
+/* Code block */
+.code-block { background: var(--bg1); border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; }
+.code-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: var(--bg2); border-bottom: 1px solid var(--border); }
+.code-lang { font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); }
+.code-dots { display: flex; gap: 6px; }
+.code-dot { width: 11px; height: 11px; border-radius: 50%; }
+.code-body { padding: 20px; font-family: var(--font-mono); font-size: 13px; line-height: 1.8; overflow-x: auto; }
+.tok-key { color: var(--violet); }
+.tok-str { color: var(--teal); }
+.tok-num { color: var(--accent); }
+.tok-comment { color: var(--text-muted); }
+.tok-fn { color: var(--coral); }
+
+/* ── PROTOTYPE PAGE ── */
+.proto-frame { background: var(--bg1); border: 1px solid var(--border); border-radius: var(--r-xl); overflow: hidden; }
+.proto-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 24px; background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+}
+.proto-nav { display: flex; gap: 24px; }
+.proto-nav-link { font-size: 13px; color: var(--text-secondary); cursor: pointer; transition: color 0.15s; }
+.proto-nav-link:hover, .proto-nav-link.active { color: var(--text-primary); }
+.proto-nav-link.active { position: relative; }
+.proto-nav-link.active::after { content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 2px; background: var(--accent); border-radius: 1px; }
+.proto-hero { padding: 64px 48px; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245,166,35,0.06) 0%, transparent 70%); }
+.proto-hero-eyebrow { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.proto-hero-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--accent); }
+.proto-hero h1 { font-family: var(--font-display); font-size: 52px; font-weight: 400; line-height: 1.1; margin-bottom: 20px; max-width: 520px; }
+.proto-hero p { color: var(--text-secondary); font-size: 16px; max-width: 420px; line-height: 1.7; margin-bottom: 32px; }
+.proto-hero-actions { display: flex; gap: 12px; }
+.proto-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 32px 48px; border-top: 1px solid var(--border); }
+.proto-metric { padding: 20px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r-lg); }
+.proto-metric-value { font-family: var(--font-display); font-size: 36px; font-weight: 400; color: var(--text-primary); line-height: 1; margin-bottom: 6px; }
+.proto-metric-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.proto-metric-delta { font-size: 12px; color: var(--green); margin-top: 6px; font-weight: 500; }
+.proto-content { padding: 32px 48px; }
+
+/* ── GRID TOKENS ── */
+.grid-demo { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 28px; }
+.grid-system { display: grid; grid-template-columns: repeat(12, 1fr); gap: 8px; }
+.grid-col { height: 40px; border-radius: 4px; background: var(--accent-dim); border: 1px solid var(--accent-glow); display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--accent); font-family: var(--font-mono); }
+.grid-col-span { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.grid-span-item { display: grid; grid-template-columns: repeat(12, 1fr); gap: 8px; }
+.grid-span-block { border-radius: 4px; display: flex; align-items: center; padding: 0 10px; font-size: 11px; font-family: var(--font-mono); height: 32px; }
+.span-3 { grid-column: span 3; background: rgba(167,139,250,0.1); color: var(--violet); border: 1px solid rgba(167,139,250,0.2); }
+.span-6 { grid-column: span 6; background: rgba(45,212,191,0.08); color: var(--teal); border: 1px solid rgba(45,212,191,0.2); }
+.span-9 { grid-column: span 9; background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-glow); }
+.span-12 { grid-column: span 12; background: rgba(248,113,113,0.07); color: var(--coral); border: 1px solid rgba(248,113,113,0.2); }
+
+/* Tooltip demo */
+.tooltip-wrap { position: relative; display: inline-block; }
+.tooltip-box {
+  position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+  background: var(--bg0); border: 1px solid var(--border-bright);
+  border-radius: var(--r-md); padding: 6px 10px;
+  font-size: 12px; color: var(--text-primary); white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: opacity 0.15s, transform 0.15s;
+  transform: translateX(-50%) translateY(4px);
+  box-shadow: var(--shadow-md);
+}
+.tooltip-wrap:hover .tooltip-box { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── INTERACTIVE TOKENS ── */
+.token-playground { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r-xl); padding: 32px; }
+.token-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+.control-group { display: flex; flex-direction: column; gap: 8px; }
+.control-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
+.range-input { width: 100%; accent-color: var(--accent); }
+.token-preview-card { border-radius: 12px; padding: 24px; border: 1px solid var(--border); transition: all 0.3s; display: flex; flex-direction: column; gap: 12px; }
+.token-preview-title { font-weight: 600; color: var(--text-primary); }
+.token-preview-body { color: var(--text-secondary); font-size: 13px; line-height: 1.6; }
+
+/* ── ICONS ── */
+.icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; }
+.icon-item { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 8px; border-radius: var(--r-md); border: 1px solid transparent; cursor: pointer; transition: all 0.15s; }
+.icon-item:hover { background: var(--bg3); border-color: var(--border); }
+.icon-svg { width: 22px; height: 22px; stroke: var(--text-secondary); }
+.icon-item:hover .icon-svg { stroke: var(--accent); }
+.icon-name { font-size: 10px; color: var(--text-muted); text-align: center; font-family: var(--font-mono); }
+
+/* ── WELCOME HERO ── */
+.home-hero { padding: 0 0 56px; }
+.home-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 40px; }
+.home-nav-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--r-xl); padding: 24px;
+  cursor: pointer; transition: all 0.2s;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.home-nav-card:hover { border-color: var(--border-md); transform: translateY(-2px); box-shadow: var(--shadow-sm); background: var(--bg3); }
+.home-card-icon { font-size: 22px; }
+.home-card-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.home-card-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+.home-stat-row { display: flex; gap: 24px; margin-top: 32px; }
+.home-stat { }
+.home-stat-num { font-family: var(--font-display); font-size: 32px; color: var(--text-primary); line-height: 1; }
+.home-stat-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+/* divider */
+.divider { height: 1px; background: var(--border); margin: 32px 0; }
+.tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.tag { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--r-full); padding: 4px 12px; font-size: 11px; color: var(--text-secondary); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .sidebar { width: 200px; }
+  .main { margin-left: 200px; }
+  .page { padding: 32px 28px; }
+  .home-grid { grid-template-columns: repeat(2, 1fr); }
+  .proto-metrics { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">AXI<span>●</span>M</div>
+    <div class="logo-sub">Design System v2.1</div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Getting Started</div>
+    <button class="nav-item active" onclick="navigate('home')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1.5" y="1.5" width="5" height="5" rx="1.5"/><rect x="9.5" y="1.5" width="5" height="5" rx="1.5"/><rect x="1.5" y="9.5" width="5" height="5" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5" rx="1.5"/></svg>
+      Overview
+    </button>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Foundations</div>
+    <button class="nav-item" onclick="navigate('colors')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 2 Q11 5 11 8 Q11 11 8 14 Q5 11 5 8 Q5 5 8 2Z"/></svg>
+      Color Tokens
+    </button>
+    <button class="nav-item" onclick="navigate('typography')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h12M8 3v10M5 13h6"/></svg>
+      Typography
+    </button>
+    <button class="nav-item" onclick="navigate('spacing')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8h12M2 5h3M2 11h3M11 5h3M11 11h3"/></svg>
+      Spacing & Grid
+    </button>
+    <button class="nav-item" onclick="navigate('icons')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="8,2 14,14 2,14"/></svg>
+      Iconography
+    </button>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Components</div>
+    <button class="nav-item" onclick="navigate('buttons')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5" width="12" height="6" rx="3"/></svg>
+      Buttons
+    </button>
+    <button class="nav-item" onclick="navigate('inputs')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="12" height="8" rx="2"/><path d="M5 8h2"/></svg>
+      Form Inputs
+    </button>
+    <button class="nav-item" onclick="navigate('cards')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2.5"/><path d="M5 6h6M5 9h4"/></svg>
+      Cards
+    </button>
+    <button class="nav-item" onclick="navigate('feedback')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.5M8 10.5v.5"/></svg>
+      Feedback
+    </button>
+    <button class="nav-item" onclick="navigate('data')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12 6 7 9 10 14 4"/></svg>
+      Data Display
+    </button>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Prototype</div>
+    <button class="nav-item" onclick="navigate('prototype')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="14" height="10" rx="2"/><path d="M5 7l2 2 4-4"/></svg>
+      Live Preview
+    </button>
+    <button class="nav-item" onclick="navigate('tokens')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2"/><path d="M8 2v2M8 12v2M2 8h2M12 8h2"/></svg>
+      Token Playground
+    </button>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="version-badge">
+      <div class="version-dot"></div>
+      axiom@2.1.0
+    </div>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<main class="main">
+
+  <!-- ▸ HOME -->
+  <div class="page active" id="page-home">
+    <div class="home-hero">
+      <div class="page-eyebrow">Design System</div>
+      <h1 class="page-title">Build beautifully,<br><em>consistently.</em></h1>
+      <p class="page-desc">AXIOM is a comprehensive design system unifying color, typography, spacing, and components into a single source of truth. Built for teams who ship.</p>
+      <div class="tag-row">
+        <span class="tag">Figma Components</span>
+        <span class="tag">Design Tokens</span>
+        <span class="tag">React Ready</span>
+        <span class="tag">Dark Mode</span>
+        <span class="tag">A11y Compliant</span>
+      </div>
+      <div class="home-stat-row">
+        <div class="home-stat"><div class="home-stat-num">84</div><div class="home-stat-label">Components</div></div>
+        <div class="home-stat"><div class="home-stat-num">12</div><div class="home-stat-label">Color scales</div></div>
+        <div class="home-stat"><div class="home-stat-num">320</div><div class="home-stat-label">Tokens</div></div>
+        <div class="home-stat"><div class="home-stat-num">AAA</div><div class="home-stat-label">Accessibility</div></div>
+      </div>
+    </div>
+    <div class="section-title">Explore the system</div>
+    <div class="home-grid">
+      <div class="home-nav-card" onclick="navigate('colors')"><div class="home-card-icon">🎨</div><div class="home-card-title">Color Tokens</div><div class="home-card-desc">Semantic color scales with dark-mode support and WCAG compliance.</div></div>
+      <div class="home-nav-card" onclick="navigate('typography')"><div class="home-card-icon">Aa</div><div class="home-card-title">Typography</div><div class="home-card-desc">A fluid type scale with display, body, and code variants.</div></div>
+      <div class="home-nav-card" onclick="navigate('spacing')"><div class="home-card-icon">⬛</div><div class="home-card-title">Spacing & Grid</div><div class="home-card-desc">4px base grid, 12-column layout, and spacing tokens.</div></div>
+      <div class="home-nav-card" onclick="navigate('buttons')"><div class="home-card-icon">⚡</div><div class="home-card-title">Buttons</div><div class="home-card-desc">5 variants, 3 sizes, icon support, and loading states.</div></div>
+      <div class="home-nav-card" onclick="navigate('cards')"><div class="home-card-icon">🃏</div><div class="home-card-title">Cards</div><div class="home-card-desc">Surface, feature, metric, and media card patterns.</div></div>
+      <div class="home-nav-card" onclick="navigate('prototype')"><div class="home-card-icon">🖥</div><div class="home-card-title">Live Prototype</div><div class="home-card-desc">See all tokens and components in a real product UI context.</div></div>
+    </div>
+  </div>
+
+  <!-- ▸ COLORS -->
+  <div class="page" id="page-colors">
+    <div class="page-eyebrow">Foundations</div>
+    <h1 class="page-title">Color Tokens</h1>
+    <p class="page-desc">All colors are defined as design tokens with semantic naming. Click any swatch to copy the hex value. Each scale has 10 steps from 50 (lightest) to 900 (darkest).</p>
+
+    <div class="section">
+      <div class="section-title">Core Palette</div>
+      <div class="color-grid" id="color-grid"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Full Color Scales</div>
+      <div id="palette-strips"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Semantic Tokens</div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Token</th><th>Value</th><th>Usage</th></tr></thead>
+          <tbody>
+            <tr><td><code style="color:var(--accent);font-family:var(--font-mono);font-size:12px">--color-bg-primary</code></td><td><span style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted)">#0a0a0b</span></td><td>Main background</td></tr>
+            <tr><td><code style="color:var(--accent);font-family:var(--font-mono);font-size:12px">--color-bg-surface</code></td><td><span style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted)">#18181c</span></td><td>Cards, panels</td></tr>
+            <tr><td><code style="color:var(--accent);font-family:var(--font-mono);font-size:12px">--color-text-primary</code></td><td><span style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted)">#f0eeea</span></td><td>Headlines, body text</td></tr>
+            <tr><td><code style="color:var(--accent);font-family:var(--font-mono);font-size:12px">--color-accent</code></td><td><span style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted)">#f5a623</span></td><td>CTAs, highlights, links</td></tr>
+            <tr><td><code style="color:var(--accent);font-family:var(--font-mono);font-size:12px">--color-success</code></td><td><span style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted)">#4ade80</span></td><td>Positive states</td></tr>
+            <tr><td><code style="color:var(--accent);font-family:var(--font-mono);font-size:12px">--color-danger</code></td><td><span style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted)">#f87171</span></td><td>Errors, destructive</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ▸ TYPOGRAPHY -->
+  <div class="page" id="page-typography">
+    <div class="page-eyebrow">Foundations</div>
+    <h1 class="page-title">Typography</h1>
+    <p class="page-desc">Three typefaces work in harmony: DM Serif Display for editorial moments, Outfit for UI, and DM Mono for code and data.</p>
+
+    <div class="section">
+      <div class="section-title">Type Scale</div>
+      <div class="type-specimen">
+        <div class="type-meta"><span class="type-name">Display</span><span class="type-tag">DM Serif Display / 52px / 400</span></div>
+        <div class="type-sample-display">The quick fox.</div>
+      </div>
+      <div class="type-specimen">
+        <div class="type-meta"><span class="type-name">Heading 1</span><span class="type-tag">Outfit / 36px / 700</span></div>
+        <div class="type-sample-h1">Design with intention.</div>
+      </div>
+      <div class="type-specimen">
+        <div class="type-meta"><span class="type-name">Heading 2</span><span class="type-tag">Outfit / 24px / 600</span></div>
+        <div class="type-sample-h2">Build consistent interfaces</div>
+      </div>
+      <div class="type-specimen">
+        <div class="type-meta"><span class="type-name">Heading 3</span><span class="type-tag">Outfit / 18px / 600</span></div>
+        <div class="type-sample-h3">Semantic color tokens</div>
+      </div>
+      <div class="type-specimen">
+        <div class="type-meta"><span class="type-name">Body</span><span class="type-tag">Outfit / 15px / 400 / line-height 1.7</span></div>
+        <div class="type-sample-body">A design system is a collection of reusable components, guided by clear standards, that can be assembled to build any number of applications. It serves as the single source of truth for design and engineering teams.</div>
+      </div>
+      <div class="type-specimen">
+        <div class="type-meta"><span class="type-name">Label</span><span class="type-tag">Outfit / 12px / 600 / uppercase</span></div>
+        <div class="type-sample-label">Section label · Status indicator · Form field</div>
+      </div>
+      <div class="type-specimen">
+        <div class="type-meta"><span class="type-name">Mono</span><span class="type-tag">DM Mono / 13px / 400</span></div>
+        <div class="type-sample-mono">const token = { color: '#f5a623', scale: 500 };</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Code Sample</div>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots">
+            <div class="code-dot" style="background:#f87171"></div>
+            <div class="code-dot" style="background:#f5a623"></div>
+            <div class="code-dot" style="background:#4ade80"></div>
+          </div>
+          <span class="code-lang">tokens.json</span>
+        </div>
+        <div class="code-body">
+<span class="tok-comment">// AXIOM Design Tokens v2.1</span><br>
+<span class="tok-key">"color"</span>: {<br>
+&nbsp;&nbsp;<span class="tok-key">"accent"</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="tok-key">"50"</span>: <span class="tok-str">"#fff8eb"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="tok-key">"500"</span>: <span class="tok-str">"#f5a623"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="tok-key">"900"</span>: <span class="tok-str">"#7c4a00"</span><br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;<span class="tok-key">"semantic"</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="tok-key">"bg-primary"</span>: <span class="tok-str">"#0a0a0b"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="tok-key">"text-primary"</span>: <span class="tok-str">"#f0eeea"</span><br>
+&nbsp;&nbsp;}<br>
+},<br>
+<span class="tok-key">"spacing"</span>: {<br>
+&nbsp;&nbsp;<span class="tok-key">"base"</span>: <span class="tok-num">4</span>,<br>
+&nbsp;&nbsp;<span class="tok-key">"scale"</span>: [<span class="tok-num">0</span>, <span class="tok-num">4</span>, <span class="tok-num">8</span>, <span class="tok-num">12</span>, <span class="tok-num">16</span>, <span class="tok-num">24</span>, <span class="tok-num">32</span>, <span class="tok-num">48</span>, <span class="tok-num">64</span>]<br>
+}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ▸ SPACING -->
+  <div class="page" id="page-spacing">
+    <div class="page-eyebrow">Foundations</div>
+    <h1 class="page-title">Spacing & Grid</h1>
+    <p class="page-desc">All spacing values derive from a 4px base unit. The 12-column grid supports fluid layouts from 320px to 1440px viewports.</p>
+
+    <div class="section">
+      <div class="section-title">Spacing Scale</div>
+      <div class="spacing-grid" id="spacing-grid"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">12-Column Grid</div>
+      <div class="grid-demo">
+        <div class="grid-system" id="grid-cols"></div>
+        <div class="grid-col-span">
+          <div class="grid-span-item"><div class="grid-span-block span-3">span-3</div></div>
+          <div class="grid-span-item"><div class="grid-span-block span-6">span-6</div></div>
+          <div class="grid-span-item"><div class="grid-span-block span-9">span-9</div></div>
+          <div class="grid-span-item"><div class="grid-span-block span-12">span-12</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Border Radius Tokens</div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;padding:28px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg)">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+          <div style="width:64px;height:64px;background:var(--bg4);border:1px solid var(--border-md);border-radius:var(--r-sm)"></div>
+          <span style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">r-sm / 6px</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+          <div style="width:64px;height:64px;background:var(--bg4);border:1px solid var(--border-md);border-radius:var(--r-md)"></div>
+          <span style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">r-md / 10px</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+          <div style="width:64px;height:64px;background:var(--bg4);border:1px solid var(--border-md);border-radius:var(--r-lg)"></div>
+          <span style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">r-lg / 16px</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+          <div style="width:64px;height:64px;background:var(--bg4);border:1px solid var(--border-md);border-radius:var(--r-xl)"></div>
+          <span style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">r-xl / 24px</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+          <div style="width:64px;height:64px;background:var(--bg4);border:1px solid var(--border-md);border-radius:var(--r-full)"></div>
+          <span style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">r-full / 999</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ▸ ICONS -->
+  <div class="page" id="page-icons">
+    <div class="page-eyebrow">Foundations</div>
+    <h1 class="page-title">Iconography</h1>
+    <p class="page-desc">24×24 stroke-based icons at 1.5px weight. Consistent optical size, 2px padding from bounds. Available at 16, 20, and 24px sizes.</p>
+    <div class="section">
+      <div class="section-title">Icon Library</div>
+      <div class="icon-grid" id="icon-grid"></div>
+    </div>
+    <div class="section">
+      <div class="section-title">Usage Guidelines</div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;padding:24px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg)">
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg3);border-radius:var(--r-md);border:1px solid var(--border)">
+          <svg style="width:16px;height:16px;stroke:var(--accent);flex-shrink:0" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>
+          <span style="font-size:13px;color:var(--text-secondary)">16px — compact UI</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg3);border-radius:var(--r-md);border:1px solid var(--border)">
+          <svg style="width:20px;height:20px;stroke:var(--teal);flex-shrink:0" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>
+          <span style="font-size:13px;color:var(--text-secondary)">20px — standard UI</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg3);border-radius:var(--r-md);border:1px solid var(--border)">
+          <svg style="width:24px;height:24px;stroke:var(--violet);flex-shrink:0" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>
+          <span style="font-size:13px;color:var(--text-secondary)">24px — feature icons</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ▸ BUTTONS -->
+  <div class="page" id="page-buttons">
+    <div class="page-eyebrow">Components</div>
+    <h1 class="page-title">Buttons</h1>
+    <p class="page-desc">Five semantic variants across three sizes. All buttons include focus rings, hover states, active states, and loading state patterns.</p>
+
+    <div class="section">
+      <div class="section-title">Variants</div>
+      <div class="btn-grid">
+        <button class="btn btn-primary">Primary action</button>
+        <button class="btn btn-secondary">Secondary</button>
+        <button class="btn btn-ghost">Ghost</button>
+        <button class="btn btn-danger">Destructive</button>
+        <button class="btn btn-teal">Positive</button>
+        <button class="btn btn-primary" disabled>Disabled</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Sizes</div>
+      <div class="btn-grid">
+        <button class="btn btn-primary btn-sm">Small</button>
+        <button class="btn btn-primary">Medium</button>
+        <button class="btn btn-primary btn-lg">Large</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">With Icons</div>
+      <div class="btn-grid">
+        <button class="btn btn-primary">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          Download
+        </button>
+        <button class="btn btn-secondary">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          Edit
+        </button>
+        <button class="btn btn-secondary btn-icon-only">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </button>
+        <button class="btn btn-secondary btn-icon-only">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <div class="tooltip-wrap">
+          <button class="btn btn-secondary btn-icon-only">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+          </button>
+          <div class="tooltip-box">View documentation</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Badge Tokens</div>
+      <div class="badge-row">
+        <span class="badge badge-default"><span class="badge-dot" style="background:var(--text-muted)"></span>Default</span>
+        <span class="badge badge-accent"><span class="badge-dot" style="background:var(--accent)"></span>Active</span>
+        <span class="badge badge-success"><span class="badge-dot" style="background:var(--green)"></span>Live</span>
+        <span class="badge badge-danger"><span class="badge-dot" style="background:var(--coral)"></span>Critical</span>
+        <span class="badge badge-info"><span class="badge-dot" style="background:var(--violet)"></span>Info</span>
+        <span class="badge badge-teal"><span class="badge-dot" style="background:var(--teal)"></span>Synced</span>
+        <span class="badge badge-default">v2.1.0</span>
+        <span class="badge badge-accent">New</span>
+        <span class="badge badge-success">Pro</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ▸ INPUTS -->
+  <div class="page" id="page-inputs">
+    <div class="page-eyebrow">Components</div>
+    <h1 class="page-title">Form Inputs</h1>
+    <p class="page-desc">Consistent form controls with clear focus states, error handling, and accessible labelling patterns.</p>
+
+    <div class="section">
+      <div class="section-title">Input Fields</div>
+      <div class="input-grid">
+        <div class="form-group">
+          <label class="form-label">Email address</label>
+          <div class="input-addon-wrap">
+            <span class="input-addon">@</span>
+            <input type="email" class="input-base" placeholder="hello@axiom.design">
+          </div>
+        </div>
+        <div class="input-row">
+          <div class="form-group">
+            <label class="form-label">First name</label>
+            <input type="text" class="input-base" placeholder="Aria">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last name</label>
+            <input type="text" class="input-base" placeholder="Nakamura">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Error state</label>
+          <input type="text" class="input-base error" value="invalid@">
+          <span class="form-error">Please enter a valid email address.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Disabled</label>
+          <input type="text" class="input-base" value="Read only value" disabled>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea class="input-base" rows="3" placeholder="Type your message…" style="resize:vertical"></textarea>
+          <span class="form-hint">Maximum 500 characters</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Toggle Switches</div>
+      <div class="toggle-group">
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-title">Email notifications</div><div class="toggle-desc">Receive updates about activity</div></div>
+          <label class="switch"><input type="checkbox" checked><div class="switch-track"></div><div class="switch-thumb"></div></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-title">Dark mode</div><div class="toggle-desc">Use the dark theme</div></div>
+          <label class="switch"><input type="checkbox" checked><div class="switch-track"></div><div class="switch-thumb"></div></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-title">Analytics</div><div class="toggle-desc">Help improve with usage data</div></div>
+          <label class="switch"><input type="checkbox"><div class="switch-track"></div><div class="switch-thumb"></div></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ▸ CARDS -->
+  <div class="page" id="page-cards">
+    <div class="page-eyebrow">Components</div>
+    <h1 class="page-title">Cards</h1>
+    <p class="page-desc">Cards group related content into interactive containers. Use the appropriate variant based on hierarchy and intent.</p>
+
+    <div class="section">
+      <div class="section-title">Feature Cards</div>
+      <div class="card-grid">
+        <div class="card card-featured">
+          <div class="card-icon" style="background:var(--accent-dim)">⚡</div>
+          <div class="card-title">Instant Deploy</div>
+          <div class="card-desc">Push to production in seconds with zero-downtime deployments.</div>
+          <div class="card-footer"><span class="card-meta">Infrastructure</span><span class="badge badge-accent">Featured</span></div>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="background:var(--teal-dim)">🛡</div>
+          <div class="card-title">Security First</div>
+          <div class="card-desc">End-to-end encryption with SOC2 compliance built in.</div>
+          <div class="card-footer"><span class="card-meta">Security</span><span class="badge badge-teal">Active</span></div>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="background:var(--violet-dim)">📊</div>
+          <div class="card-title">Analytics</div>
+          <div class="card-desc">Real-time insights with customizable dashboards.</div>
+          <div class="card-footer"><span class="card-meta">Data</span><span class="badge badge-info">New</span></div>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="background:var(--coral-dim)">🔗</div>
+          <div class="card-title">Integrations</div>
+          <div class="card-desc">Connect to 200+ apps out of the box.</div>
+          <div class="card-footer"><span class="card-meta">Platform</span><span class="badge badge-default">200+</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Metric Cards</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+        <div style="padding:20px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg)">
+          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Revenue</div>
+          <div style="font-family:var(--font-display);font-size:28px;color:var(--text-primary);line-height:1">$84.2k</div>
+          <div style="font-size:12px;color:var(--green);margin-top:6px">↑ 12.4%</div>
+        </div>
+        <div style="padding:20px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg)">
+          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Users</div>
+          <div style="font-family:var(--font-display);font-size:28px;color:var(--text-primary);line-height:1">24,819</div>
+          <div style="font-size:12px;color:var(--green);margin-top:6px">↑ 8.1%</div>
+        </div>
+        <div style="padding:20px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg)">
+          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Uptime</div>
+          <div style="font-family:var(--font-display);font-size:28px;color:var(--text-primary);line-height:1">99.98%</div>
+          <div style="font-size:12px;color:var(--teal);margin-top:6px">● Nominal</div>
+        </div>
+        <div style="padding:20px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg)">
+          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Latency</div>
+          <div style="font-family:var(--font-display);font-size:28px;color:var(--text-primary);line-height:1">38ms</div>
+          <div style="font-size:12px;color:var(--coral);margin-top:6px">↑ 3ms</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">User Cards</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-xl);padding:20px;display:flex;align-items:center;gap:14px;min-width:280px">
+          <div style="width:44px;height:44px;border-radius:50%;background:var(--accent-dim);border:2px solid var(--accent-glow);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--accent);flex-shrink:0">AN</div>
+          <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--text-primary)">Aria Nakamura</div><div style="font-size:12px;color:var(--text-muted)">Lead Designer</div></div>
+          <span class="badge badge-success" style="font-size:10px">Online</span>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-xl);padding:20px;display:flex;align-items:center;gap:14px;min-width:280px">
+          <div style="width:44px;height:44px;border-radius:50%;background:var(--violet-dim);border:2px solid rgba(167,139,250,0.25);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--violet);flex-shrink:0">JM</div>
+          <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--text-primary)">Jonas Mercer</div><div style="font-size:12px;color:var(--text-muted)">Engineering Lead</div></div>
+          <span class="badge badge-default" style="font-size:10px">Away</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ▸ FEEDBACK -->
+  <div class="page" id="page-feedback">
+    <div class="page-eyebrow">Components</div>
+    <h1 class="page-title">Feedback & Alerts</h1>
+    <p class="page-desc">Communicate system status, actions, and validation to users through consistent feedback patterns.</p>
+
+    <div class="section">
+      <div class="section-title">Alert Variants</div>
+      <div class="alert-stack">
+        <div class="alert alert-info">
+          <svg class="alert-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+          <div class="alert-content"><div class="alert-title">Heads up!</div><div class="alert-message">A new version of this component is available in v2.2.</div></div>
+        </div>
+        <div class="alert alert-success">
+          <svg class="alert-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <div class="alert-content"><div class="alert-title">Deployment successful</div><div class="alert-message">Your changes are now live on production.</div></div>
+        </div>
+        <div class="alert alert-warning">
+          <svg class="alert-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+          <div class="alert-content"><div class="alert-title">Approaching limits</div><div class="alert-message">You're using 88% of your monthly API quota.</div></div>
+        </div>
+        <div class="alert alert-error">
+          <svg class="alert-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+          <div class="alert-content"><div class="alert-title">Payment failed</div><div class="alert-message">Card ending in 4242 was declined. Please update your billing info.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Progress Indicators</div>
+      <div class="progress-stack">
+        <div class="progress-item">
+          <div class="progress-header"><span class="progress-name">Storage</span><span class="progress-value">72%</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:72%;background:var(--accent)"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header"><span class="progress-name">API Quota</span><span class="progress-value">88%</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:88%;background:var(--coral)"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header"><span class="progress-name">Build pipeline</span><span class="progress-value">46%</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:46%;background:var(--teal)"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header"><span class="progress-name">Completion</span><span class="progress-value">93%</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:93%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ▸ DATA DISPLAY -->
+  <div class="page" id="page-data">
+    <div class="page-eyebrow">Components</div>
+    <h1 class="page-title">Data Display</h1>
+    <p class="page-desc">Tables, avatars, tabs, and other patterns for surfacing structured information clearly.</p>
+
+    <div class="section">
+      <div class="section-title">Data Table</div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Component</th><th>Category</th><th>Status</th><th>Version</th></tr></thead>
+          <tbody>
+            <tr><td><strong style="color:var(--text-primary);font-weight:500">Button</strong></td><td>Actions</td><td><span class="badge badge-success">Stable</span></td><td><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">v2.0.1</span></td></tr>
+            <tr><td><strong style="color:var(--text-primary);font-weight:500">Input</strong></td><td>Forms</td><td><span class="badge badge-success">Stable</span></td><td><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">v2.0.0</span></td></tr>
+            <tr><td><strong style="color:var(--text-primary);font-weight:500">Modal</strong></td><td>Overlay</td><td><span class="badge badge-accent">Beta</span></td><td><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">v0.9.2</span></td></tr>
+            <tr><td><strong style="color:var(--text-primary);font-weight:500">Combobox</strong></td><td>Forms</td><td><span class="badge badge-info">New</span></td><td><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">v0.1.0</span></td></tr>
+            <tr><td><strong style="color:var(--text-primary);font-weight:500">DatePicker</strong></td><td>Forms</td><td><span class="badge badge-default">Planned</span></td><td><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">—</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Avatar Group</div>
+      <div style="display:flex;align-items:center;gap:20px;padding:24px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg)">
+        <div class="avatar-group">
+          <div class="avatar" style="background:#f5a623;color:#0a0a0b">AN</div>
+          <div class="avatar" style="background:var(--violet-dim);color:var(--violet);border-color:var(--bg2)">JM</div>
+          <div class="avatar" style="background:var(--teal-dim);color:var(--teal);border-color:var(--bg2)">SR</div>
+          <div class="avatar" style="background:var(--coral-dim);color:var(--coral);border-color:var(--bg2)">EL</div>
+          <div class="avatar avatar-overflow" style="border-color:var(--bg2)">+5</div>
+        </div>
+        <span style="font-size:13px;color:var(--text-muted)">9 members</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Tab Navigation</div>
+      <div class="tab-bar">
+        <div class="tab-item active" onclick="selectTab(this,'Overview')">Overview</div>
+        <div class="tab-item" onclick="selectTab(this,'Components')">Components</div>
+        <div class="tab-item" onclick="selectTab(this,'Tokens')">Tokens</div>
+        <div class="tab-item" onclick="selectTab(this,'Changelog')">Changelog</div>
+      </div>
+      <div style="padding:20px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg);min-height:80px;display:flex;align-items:center">
+        <p id="tab-content" style="color:var(--text-secondary);font-size:14px">Welcome to the Overview tab. Select a tab above to switch panels.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ▸ PROTOTYPE -->
+  <div class="page" id="page-prototype">
+    <div class="page-eyebrow">Interactive Prototype</div>
+    <h1 class="page-title">Live Preview</h1>
+    <p class="page-desc">All tokens and components assembled into a real product UI. This is what the design system looks like in context.</p>
+    <div class="proto-frame">
+      <div class="proto-topbar">
+        <div style="font-family:var(--font-display);font-size:18px;color:var(--text-primary)">Axiom<span style="color:var(--accent)">.</span></div>
+        <nav class="proto-nav">
+          <span class="proto-nav-link active">Dashboard</span>
+          <span class="proto-nav-link">Projects</span>
+          <span class="proto-nav-link">Team</span>
+          <span class="proto-nav-link">Settings</span>
+        </nav>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="badge badge-success">All systems go</span>
+          <div class="avatar" style="background:var(--accent-dim);color:var(--accent);border:none;width:32px;height:32px;font-size:11px">AN</div>
+        </div>
+      </div>
+      <div class="proto-hero">
+        <div class="proto-hero-eyebrow">Welcome back, Aria</div>
+        <h1>Your workspace<br>at a glance.</h1>
+        <p>Here's what's happening across your projects today. 3 deployments pending.</p>
+        <div class="proto-hero-actions">
+          <button class="btn btn-primary btn-lg">New deployment</button>
+          <button class="btn btn-secondary btn-lg">View all projects</button>
+        </div>
+      </div>
+      <div class="proto-metrics">
+        <div class="proto-metric"><div class="proto-metric-value">$84.2k</div><div class="proto-metric-label">Monthly Revenue</div><div class="proto-metric-delta">↑ 12.4% vs last month</div></div>
+        <div class="proto-metric"><div class="proto-metric-value">24,819</div><div class="proto-metric-label">Active Users</div><div class="proto-metric-delta" style="color:var(--green)">↑ 8.1%</div></div>
+        <div class="proto-metric"><div class="proto-metric-value">99.98%</div><div class="proto-metric-label">Uptime SLA</div><div class="proto-metric-delta" style="color:var(--teal)">● Nominal</div></div>
+        <div class="proto-metric"><div class="proto-metric-value">38ms</div><div class="proto-metric-label">Avg Latency</div><div class="proto-metric-delta" style="color:var(--coral)">↑ 3ms from p99</div></div>
+      </div>
+      <div class="proto-content">
+        <div class="alert alert-warning" style="margin-bottom:20px">
+          <svg class="alert-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+          <div class="alert-content"><div class="alert-title">Renewal reminder</div><div class="alert-message">Your Pro plan renews in 7 days. Manage subscription →</div></div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Project</th><th>Status</th><th>Last deploy</th><th>Team</th></tr></thead>
+            <tbody>
+              <tr><td><strong style="color:var(--text-primary);font-weight:500">axiom-web</strong></td><td><span class="badge badge-success">Live</span></td><td style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">2 hours ago</td><td><div class="avatar-group" style="transform:scale(0.85);transform-origin:left"><div class="avatar" style="background:var(--accent-dim);color:var(--accent);width:28px;height:28px;font-size:10px">AN</div><div class="avatar" style="background:var(--violet-dim);color:var(--violet);width:28px;height:28px;font-size:10px;border-color:var(--bg1)">JM</div></div></td></tr>
+              <tr><td><strong style="color:var(--text-primary);font-weight:500">api-gateway</strong></td><td><span class="badge badge-accent">Building</span></td><td style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">Just now</td><td><div class="avatar-group" style="transform:scale(0.85);transform-origin:left"><div class="avatar" style="background:var(--teal-dim);color:var(--teal);width:28px;height:28px;font-size:10px">SR</div></div></td></tr>
+              <tr><td><strong style="color:var(--text-primary);font-weight:500">design-tokens</strong></td><td><span class="badge badge-info">Staged</span></td><td style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">1 day ago</td><td><div class="avatar-group" style="transform:scale(0.85);transform-origin:left"><div class="avatar" style="background:var(--accent-dim);color:var(--accent);width:28px;height:28px;font-size:10px">AN</div><div class="avatar" style="background:var(--coral-dim);color:var(--coral);width:28px;height:28px;font-size:10px;border-color:var(--bg1)">EL</div><div class="avatar" style="background:var(--bg4);color:var(--text-muted);width:28px;height:28px;font-size:9px;border-color:var(--bg1)">+3</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ▸ TOKEN PLAYGROUND -->
+  <div class="page" id="page-tokens">
+    <div class="page-eyebrow">Interactive</div>
+    <h1 class="page-title">Token Playground</h1>
+    <p class="page-desc">Manipulate design tokens live and see how they affect components. Great for exploring and presenting token decisions.</p>
+    <div class="token-playground">
+      <div class="token-controls">
+        <div class="control-group">
+          <label class="control-label">Corner Radius — <span id="r-val" style="color:var(--accent)">12px</span></label>
+          <input type="range" class="range-input" min="0" max="32" value="12" oninput="updateToken('radius',this.value)">
+        </div>
+        <div class="control-group">
+          <label class="control-label">Padding — <span id="p-val" style="color:var(--accent)">24px</span></label>
+          <input type="range" class="range-input" min="8" max="48" value="24" oninput="updateToken('padding',this.value)">
+        </div>
+        <div class="control-group">
+          <label class="control-label">Font Size — <span id="f-val" style="color:var(--accent)">15px</span></label>
+          <input type="range" class="range-input" min="12" max="22" value="15" oninput="updateToken('font',this.value)">
+        </div>
+        <div class="control-group">
+          <label class="control-label">Accent Color</label>
+          <div style="display:flex;gap:8px;margin-top:4px">
+            <div class="color-swatch-pick" style="width:28px;height:28px;background:#f5a623;border-radius:50%;cursor:pointer;border:2px solid #fff" onclick="setAccent('#f5a623')"></div>
+            <div class="color-swatch-pick" style="width:28px;height:28px;background:#2dd4bf;border-radius:50%;cursor:pointer" onclick="setAccent('#2dd4bf')"></div>
+            <div class="color-swatch-pick" style="width:28px;height:28px;background:#a78bfa;border-radius:50%;cursor:pointer" onclick="setAccent('#a78bfa')"></div>
+            <div class="color-swatch-pick" style="width:28px;height:28px;background:#f87171;border-radius:50%;cursor:pointer" onclick="setAccent('#f87171')"></div>
+            <div class="color-swatch-pick" style="width:28px;height:28px;background:#4ade80;border-radius:50%;cursor:pointer" onclick="setAccent('#4ade80')"></div>
+          </div>
+        </div>
+      </div>
+      <div id="token-preview" class="token-preview-card">
+        <div class="token-preview-title">Preview Component</div>
+        <div class="token-preview-body">This card updates in real time as you adjust the tokens above. Change the radius, padding, font size, and accent color to see how token decisions impact component feel.</div>
+        <div style="display:flex;gap:10px;margin-top:4px">
+          <button class="btn btn-primary btn-sm" id="preview-btn">Apply tokens</button>
+          <span class="badge badge-accent" id="preview-badge">Live preview</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<script>
+// ── NAVIGATION ──
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(btn => {
+    if (btn.getAttribute('onclick') === `navigate('${page}')`) btn.classList.add('active');
+  });
+}
+
+// ── COLOR GRID ──
+const colors = [
+  { name: 'Accent', hex: '#f5a623', role: 'Primary CTA', bg: 'rgba(245,166,35,0.12)' },
+  { name: 'Teal', hex: '#2dd4bf', role: 'Positive states', bg: 'rgba(45,212,191,0.1)' },
+  { name: 'Coral', hex: '#f87171', role: 'Danger / Error', bg: 'rgba(248,113,113,0.1)' },
+  { name: 'Violet', hex: '#a78bfa', role: 'Info / Meta', bg: 'rgba(167,139,250,0.1)' },
+  { name: 'Green', hex: '#4ade80', role: 'Success', bg: 'rgba(74,222,128,0.1)' },
+  { name: 'Surface 0', hex: '#0a0a0b', role: 'Background base', bg: '#111113' },
+  { name: 'Surface 1', hex: '#18181c', role: 'Cards / panels', bg: '#1f1f24' },
+  { name: 'Text Primary', hex: '#f0eeea', role: 'Headlines', bg: 'rgba(240,238,234,0.06)' },
+  { name: 'Text Muted', hex: '#5a5858', role: 'Placeholders', bg: 'rgba(90,88,88,0.08)' },
+];
+const grid = document.getElementById('color-grid');
+colors.forEach(c => {
+  grid.innerHTML += `<div class="color-card" onclick="copyColor(this,'${c.hex}')">
+    <div class="color-swatch" style="background:${c.bg};border-bottom:1px solid rgba(255,255,255,0.06)">
+      <div style="width:28px;height:28px;border-radius:50%;background:${c.hex};box-shadow:0 2px 8px rgba(0,0,0,0.4)"></div>
+    </div>
+    <div class="color-label-row">
+      <div class="color-name">${c.name}</div>
+      <div class="color-value">${c.hex} <span class="color-copied">Copied!</span></div>
+      <div class="color-role">${c.role}</div>
+    </div>
+  </div>`;
+});
+
+function copyColor(el, hex) {
+  navigator.clipboard.writeText(hex).catch(()=>{});
+  el.classList.add('copied');
+  setTimeout(() => el.classList.remove('copied'), 1500);
+}
+
+// ── PALETTE STRIPS ──
+const palettes = [
+  { name: 'Amber', stops: ['#fff8eb','#fef0c7','#fedf89','#fec84b','#fdb022','#f5a623','#dc6803','#b45309','#92400e','#7c2d12'] },
+  { name: 'Teal', stops: ['#f0fdf9','#ccfbf1','#99f6e4','#5eead4','#2dd4bf','#14b8a6','#0d9488','#0f766e','#115e59','#134e4a'] },
+  { name: 'Violet', stops: ['#f5f3ff','#ede9fe','#ddd6fe','#c4b5fd','#a78bfa','#8b5cf6','#7c3aed','#6d28d9','#5b21b6','#4c1d95'] },
+  { name: 'Coral', stops: ['#fff1f2','#ffe4e6','#fecdd3','#fda4af','#fb7185','#f87171','#ef4444','#dc2626','#b91c1c','#991b1b'] },
+  { name: 'Green', stops: ['#f0fdf4','#dcfce7','#bbf7d0','#86efac','#4ade80','#22c55e','#16a34a','#15803d','#166534','#14532d'] },
+];
+const stripsEl = document.getElementById('palette-strips');
+palettes.forEach(p => {
+  const row = `<div style="margin-bottom:20px">
+    <div style="font-size:11px;color:var(--text-muted);font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">${p.name}</div>
+    <div class="palette-strip">${p.stops.map((s,i)=>`<div class="palette-stop" style="background:${s}" title="${s}"><span>${50+i*100 > 900 ? 900 : (i===0?50:i*100)}</span></div>`).join('')}</div>
+  </div>`;
+  stripsEl.innerHTML += row;
+});
+
+// ── SPACING GRID ──
+const spaces = [
+  { name: 'sp-1', px: 4 }, { name: 'sp-2', px: 8 }, { name: 'sp-3', px: 12 },
+  { name: 'sp-4', px: 16 }, { name: 'sp-5', px: 20 }, { name: 'sp-6', px: 24 },
+  { name: 'sp-8', px: 32 }, { name: 'sp-10', px: 40 }, { name: 'sp-12', px: 48 },
+  { name: 'sp-16', px: 64 }, { name: 'sp-20', px: 80 },
+];
+const sg = document.getElementById('spacing-grid');
+spaces.forEach(s => {
+  sg.innerHTML += `<div class="spacing-row">
+    <span class="spacing-name" style="font-family:var(--font-mono)">${s.name}</span>
+    <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:${Math.min(s.px*3,100)}%"></div></div>
+    <span class="spacing-px">${s.px}px</span>
+  </div>`;
+});
+
+// Grid cols
+const gc = document.getElementById('grid-cols');
+for(let i=1;i<=12;i++) gc.innerHTML += `<div class="grid-col">${i}</div>`;
+
+// ── ICONS ──
+const icons = [
+  { name:'home', path:'M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z' },
+  { name:'search', path:'M21 21l-4.35-4.35M17 11A6 6 0 115 11a6 6 0 0112 0z' },
+  { name:'settings', path:'M12 15a3 3 0 100-6 3 3 0 000 6zM19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z' },
+  { name:'bell', path:'M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0' },
+  { name:'user', path:'M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z' },
+  { name:'chart', path:'M18 20V10M12 20V4M6 20v-6' },
+  { name:'lock', path:'M19 11H5a2 2 0 00-2 2v7a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2zM7 11V7a5 5 0 0110 0v4' },
+  { name:'mail', path:'M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zM22 6l-10 7L2 6' },
+  { name:'star', path:'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z' },
+  { name:'check', path:'M20 6L9 17l-5-5' },
+  { name:'edit', path:'M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z' },
+  { name:'trash', path:'M3 6h18M8 6V4h8v2M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6' },
+  { name:'link', path:'M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71' },
+  { name:'plus', path:'M12 5v14M5 12h14' },
+  { name:'arrow-right', path:'M5 12h14M12 5l7 7-7 7' },
+  { name:'cloud', path:'M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z' },
+];
+const ig = document.getElementById('icon-grid');
+icons.forEach(ic => {
+  ig.innerHTML += `<div class="icon-item" title="${ic.name}">
+    <svg class="icon-svg" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="${ic.path}"/></svg>
+    <span class="icon-name">${ic.name}</span>
+  </div>`;
+});
+
+// ── TAB SWITCHER ──
+const tabContent = {
+  'Overview': 'Welcome to the Overview tab. This panel shows a summary of all design system resources and recent updates.',
+  'Components': 'The Components panel lists all 84 UI components, their variants, props, and usage guidelines.',
+  'Tokens': 'Design tokens panel: browse all 320 tokens by category — color, spacing, typography, shadows, and borders.',
+  'Changelog': 'v2.1.0 — Added Combobox component, updated focus ring tokens, improved dark mode contrast ratios.'
+};
+function selectTab(el, name) {
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-content').textContent = tabContent[name];
+}
+
+// ── TOKEN PLAYGROUND ──
+function updateToken(prop, val) {
+  const preview = document.getElementById('token-preview');
+  const btn = document.getElementById('preview-btn');
+  const badge = document.getElementById('preview-badge');
+  if (prop === 'radius') {
+    preview.style.borderRadius = val + 'px';
+    btn.style.borderRadius = Math.min(val * 0.6, 12) + 'px';
+    document.getElementById('r-val').textContent = val + 'px';
+  }
+  if (prop === 'padding') {
+    preview.style.padding = val + 'px';
+    document.getElementById('p-val').textContent = val + 'px';
+  }
+  if (prop === 'font') {
+    preview.style.fontSize = val + 'px';
+    document.getElementById('f-val').textContent = val + 'px';
+  }
+}
+function setAccent(hex) {
+  document.documentElement.style.setProperty('--accent', hex);
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  document.documentElement.style.setProperty('--accent-dim', `rgba(${r},${g},${b},0.12)`);
+  document.documentElement.style.setProperty('--accent-glow', `rgba(${r},${g},${b},0.25)`);
+  document.querySelectorAll('.color-swatch-pick').forEach(el => el.style.border = '');
+  event.target.style.border = '2px solid #fff';
+}
+</script>
+</body>
+</html>
